@@ -2,8 +2,7 @@ var main = document.getElementById("main");
 var buttonOne = document.getElementById("button-1");
 var h1 = document.getElementById("header");
 var message = document.getElementById("message");
-
-
+var section = document.getElementById("section")
 
 function startGame() {
     h1.textContent = "";
@@ -192,7 +191,15 @@ function startGame() {
     }
 
     function wrongAnswer() {
-        alert("wrong answer!")
+        var wrongAlert = document.createElement("wrong-alert")
+        wrongAlert.textContent = "Wrong!";
+        wrongAlert.style.display = "block";
+        wrongAlert.style.fontSize = "25px";
+        wrongAlert.style.borderTop = "3px solid gray";
+        wrongAlert.style.marginTop = "3%"
+        section.appendChild(wrongAlert);
+        var timeOut = setTimeout(function(){wrongAlert.style.display = "none";}, 500);
+        // alert("wrong answer!")
         // time decrease
 
         // if time=0, game over
