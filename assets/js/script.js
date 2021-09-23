@@ -1,8 +1,10 @@
 var main = document.getElementById("main");
 var buttonOne = document.getElementById("button-1");
 var h1 = document.getElementById("header");
+var h4 = document.getElementById("h4")
 var message = document.getElementById("message");
 var section = document.getElementById("section")
+var initial = document.getElementById("scoreLog")
 
 function startGame() {
     h1.textContent = "";
@@ -39,8 +41,6 @@ function startGame() {
     choice4.addEventListener("click", wrongAnswer);
 
     function rightAnswer1() {
-        // score up
-
         h2.textContent = "";
         choice1.style.display = "none";
         choice2.style.display = "none";
@@ -75,8 +75,6 @@ function startGame() {
         choice8.addEventListener("click", wrongAnswer);
 
         function rightAnswer2() {
-            // score up
-
             h2.textContent = "";
             choice5.style.display = "none";
             choice6.style.display = "none";
@@ -111,8 +109,6 @@ function startGame() {
             choice12.addEventListener("click", rightAnswer3);
     
             function rightAnswer3() {
-                // score up
-
                 h2.textContent = "";
                 choice9.style.display = "none";
                 choice10.style.display = "none";
@@ -147,8 +143,6 @@ function startGame() {
                 choice16.addEventListener("click", wrongAnswer);
 
                 function rightAnswer4() {
-                    // score up
-
                     h2.textContent = "";
                     choice13.style.display = "none";
                     choice14.style.display = "none";
@@ -183,7 +177,45 @@ function startGame() {
                     choice20.addEventListener("click", rightAnswer5);
             
                     function rightAnswer5() {
+                        // stop clock
+
+                        h2.textContent = "";
+                        choice17.style.display = "none";
+                        choice18.style.display = "none";
+                        choice19.style.display = "none";
+                        choice20.style.display = "none";
+
+                        h2.textContent = "All done!"
+
+                        var finalScore = document.createElement("h3");
+                        finalScore.textContent = "Your final score is "
+                        main.appendChild(finalScore);
                         
+                        var initialPrompt = document.createElement("h4");
+                        initialPrompt.setAttribute("id","h4");
+                        initialPrompt.textContent = "Enter initials: ";
+                        section.appendChild(initialPrompt);
+
+                        var scoreLog = document.createElement("input");
+                        scoreLog.setAttribute("type","text");
+                        scoreLog.setAttribute("id","scoreLog");
+                        scoreLog.style.height = "40px";
+                        scoreLog.style.width = "150px";
+                        scoreLog.style.fontSize = "20px";
+                        section.appendChild(scoreLog);
+
+                        var submitButton = document.createElement("input");
+                        submitButton.style.fontSize = "20px";
+                        submitButton.setAttribute("id","button")
+                        submitButton.setAttribute("type","button");
+                        submitButton.setAttribute("value","Submit");
+                        section.appendChild(submitButton);
+
+                        submitButton.addEventListener("click", function(event) {
+                            var initial = document.querySelector("#scoreLog").value;
+                            localStorage.setItem("initial", initial);
+                            location.replace("highscore.html");
+                        });
                     }
                 }
             }
@@ -204,6 +236,10 @@ function startGame() {
 
         // if time=0, game over
     }
+}
+
+function timeClock() {
+
 }
 
 buttonOne.addEventListener("click", startGame)
