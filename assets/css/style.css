@@ -55,3 +55,8 @@ button, #button{
 input {
     margin-left: 2.5%;
 }
+
+li{
+    font-size: 40px;
+    background-color: lightpink;
+}

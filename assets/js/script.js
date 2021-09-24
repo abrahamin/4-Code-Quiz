@@ -1,4 +1,5 @@
 var main = document.getElementById("main");
+var timeEl = document.getElementById("time");
 var buttonOne = document.getElementById("button-1");
 var h1 = document.getElementById("header");
 var h4 = document.getElementById("h4")
@@ -6,7 +7,16 @@ var message = document.getElementById("message");
 var section = document.getElementById("section")
 var initial = document.getElementById("scoreLog")
 
+var secondsLeft = 75;
+
+var timerInterval;
+
 function startGame() {
+    timerInterval = setInterval(function() {
+        secondsLeft--;
+        timeEl.textContent = "Time: " + secondsLeft;
+    }, 1000);
+
     h1.textContent = "";
     message.textContent = "";
     buttonOne.style.display = "none";
@@ -39,6 +49,11 @@ function startGame() {
     choice2.addEventListener("click", wrongAnswer);
     choice3.addEventListener("click", rightAnswer1);
     choice4.addEventListener("click", wrongAnswer);
+
+    if (secondsLeft <= 0) {
+        clearInterval(timerInterval);
+        gameOver();
+    }
 
     function rightAnswer1() {
         h2.textContent = "";
@@ -74,6 +89,11 @@ function startGame() {
         choice7.addEventListener("click", rightAnswer2);
         choice8.addEventListener("click", wrongAnswer);
 
+        if (secondsLeft <= 0) {
+            clearInterval(timerInterval);
+            gameOver();
+        }
+
         function rightAnswer2() {
             h2.textContent = "";
             choice5.style.display = "none";
@@ -107,6 +127,11 @@ function startGame() {
             choice10.addEventListener("click", wrongAnswer);
             choice11.addEventListener("click", wrongAnswer);
             choice12.addEventListener("click", rightAnswer3);
+
+            if (secondsLeft <= 0) {
+                clearInterval(timerInterval);
+                gameOver();
+            }
     
             function rightAnswer3() {
                 h2.textContent = "";
@@ -142,6 +167,11 @@ function startGame() {
                 choice15.addEventListener("click", rightAnswer4);
                 choice16.addEventListener("click", wrongAnswer);
 
+                if (secondsLeft <= 0) {
+                    clearInterval(timerInterval);
+                    gameOver();
+                }
+
                 function rightAnswer4() {
                     h2.textContent = "";
                     choice13.style.display = "none";
@@ -175,9 +205,14 @@ function startGame() {
                     choice18.addEventListener("click", wrongAnswer);
                     choice19.addEventListener("click", wrongAnswer);
                     choice20.addEventListener("click", rightAnswer5);
+
+                    if (secondsLeft <= 0) {
+                        clearInterval(timerInterval);
+                        gameOver();
+                    }
             
                     function rightAnswer5() {
-                        // stop clock
+                        clearInterval(timerInterval);
 
                         h2.textContent = "";
                         choice17.style.display = "none";
@@ -188,7 +223,7 @@ function startGame() {
                         h2.textContent = "All done!"
 
                         var finalScore = document.createElement("h3");
-                        finalScore.textContent = "Your final score is "
+                        finalScore.textContent = "Your final score is " + secondsLeft;
                         main.appendChild(finalScore);
                         
                         var initialPrompt = document.createElement("h4");
@@ -213,33 +248,71 @@ function startGame() {
 
                         submitButton.addEventListener("click", function(event) {
                             var initial = document.querySelector("#scoreLog").value;
-                            localStorage.setItem("initial", initial);
-                            location.replace("highscore.html");
+                            localStorage.setItem(initial, initial + " - " + secondsLeft);
+                            location.assign("highscore.html");
                         });
                     }
                 }
             }
         }
     }
+}
 
-    function wrongAnswer() {
-        var wrongAlert = document.createElement("wrong-alert")
-        wrongAlert.textContent = "Wrong!";
-        wrongAlert.style.display = "block";
-        wrongAlert.style.fontSize = "25px";
-        wrongAlert.style.borderTop = "3px solid gray";
-        wrongAlert.style.marginTop = "3%"
-        section.appendChild(wrongAlert);
-        var timeOut = setTimeout(function(){wrongAlert.style.display = "none";}, 500);
-        // alert("wrong answer!")
-        // time decrease
+function wrongAnswer() {
+    var wrongAlert = document.createElement("wrong-alert")
+    wrongAlert.textContent = "Wrong!";
+    wrongAlert.style.display = "block";
+    wrongAlert.style.fontSize = "25px";
+    wrongAlert.style.borderTop = "3px solid gray";
+    wrongAlert.style.marginTop = "3%"
+    section.appendChild(wrongAlert);
+    var timeOut = setTimeout(function(){wrongAlert.style.display = "none";}, 500);
 
-        // if time=0, game over
+    if (secondsLeft > 10) {
+        secondsLeft = secondsLeft - 10;
+    } else if (secondsLeft <= 10) {
+        secondsLeft = secondsLeft - (secondsLeft - 1);
     }
-}
+};
 
-function timeClock() {
+function gameOver(choiceA, choiceB, choiceC, choiceD) {
+    h2.textContent = "";
+    choiceA.style.display = "none";
+    choiceB.style.display = "none";
+    choiceC.style.display = "none";
+    choiceD.style.display = "none";
 
-}
+    h2.textContent = "All done!"
 
-buttonOne.addEventListener("click", startGame)
+    var finalScore = document.createElement("h3");
+    finalScore.textContent = "Your final score is " + secondsLeft;
+    main.appendChild(finalScore);
+    
+    var initialPrompt = document.createElement("h4");
+    initialPrompt.setAttribute("id","h4");
+    initialPrompt.textContent = "Enter initials: ";
+    section.appendChild(initialPrompt);
+
+    var scoreLog = document.createElement("input");
+    scoreLog.setAttribute("type","text");
+    scoreLog.setAttribute("id","scoreLog");
+    scoreLog.style.height = "40px";
+    scoreLog.style.width = "150px";
+    scoreLog.style.fontSize = "20px";
+    section.appendChild(scoreLog);
+
+    var submitButton = document.createElement("input");
+    submitButton.style.fontSize = "20px";
+    submitButton.setAttribute("id","button")
+    submitButton.setAttribute("type","button");
+    submitButton.setAttribute("value","Submit");
+    section.appendChild(submitButton);
+
+    submitButton.addEventListener("click", function(event) {
+        var initial = document.querySelector("#scoreLog").value;
+        localStorage.setItem(initial, secondsLeft);
+        location.replace("highscore.html");
+    });
+};
+
+buttonOne.addEventListener("click", startGame);
